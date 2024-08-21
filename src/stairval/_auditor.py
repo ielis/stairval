@@ -363,7 +363,7 @@ class Auditor(typing.Generic[ITEM], metaclass=abc.ABCMeta):
         return NotepadTree(label, level=0)
 
     @abc.abstractmethod
-    def process(
+    def audit(
         self,
         item: ITEM,
         notepad: Notepad,

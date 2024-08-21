@@ -29,7 +29,7 @@ class TestAuditor:
         )
 
         notepad = auditor.prepare_notepad("person")
-        auditor.process(person, notepad)
+        auditor.audit(person, notepad)
 
         buf = io.StringIO()
         notepad.summarize(file=buf)
@@ -52,7 +52,7 @@ class TestAuditor:
         )
 
         notepad = auditor.prepare_notepad("person")
-        auditor.process(person, notepad)
+        auditor.audit(person, notepad)
 
         buf = io.StringIO()
         notepad.summarize(file=buf)

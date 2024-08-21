@@ -30,7 +30,7 @@ class PersonAuditor(Auditor[Person]):
     ):
         self._address_auditor = address_auditor
 
-    def process(
+    def audit(
         self,
         item: Person,
         notepad: Notepad,
@@ -39,12 +39,12 @@ class PersonAuditor(Auditor[Person]):
             notepad.add_error("`age` must not be negative")
 
         address_notepad = notepad.add_subsection("address")
-        self._address_auditor.process(item.address, address_notepad)
+        self._address_auditor.audit(item.address, address_notepad)
 
 
 class AddressAuditor(Auditor[Address]):
 
-    def process(
+    def audit(
         self,
         item: Address,
         notepad: Notepad,
