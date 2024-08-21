@@ -1,5 +1,8 @@
 import abc
 import enum
+import io
+import os
+import sys
 import typing
 
 
@@ -55,21 +58,10 @@ class Issue:
         return self._solution
 
     def __str__(self):
-        return f'DataSanityIssue(level={self._level}, message={self._message}, solution={self._solution})'
+        return f"DataSanityIssue(level={self._level}, message={self._message}, solution={self._solution})"
 
     def __repr__(self):
         return str(self)
-
-
-IN = typing.TypeVar('IN')
-"""
-:class:`Auditor` input.
-"""
-
-OUT = typing.TypeVar('OUT')
-"""
-The output data type of :class:`Auditor`.
-"""
 
 
 class Notepad(metaclass=abc.ABCMeta):
@@ -87,15 +79,14 @@ class Notepad(metaclass=abc.ABCMeta):
     def __init__(
         self,
         label: str,
+        level: int,
     ):
         self._label = label
+        self._level = level
         self._issues: typing.MutableSequence[Issue] = []
 
     @abc.abstractmethod
-    def add_subsection(
-        self,
-        label: str
-    ) -> "Notepad":
+    def add_subsection(self, label: str) -> "Notepad":
         """
         Add a labeled subsection.
 
@@ -112,13 +103,22 @@ class Notepad(metaclass=abc.ABCMeta):
         return self._label
 
     @property
+    def level(self) -> int:
+        """
+        Get the level of the notepad node (distance from the top-level hierarchy node).
+        """
+        return self._level
+
+    @property
     def issues(self) -> typing.Sequence[Issue]:
         """
         Get an iterable with the issues of the current section.
         """
         return self._issues
 
-    def add_issue(self, level: Level, message: str, solution: typing.Optional[str] = None):
+    def add_issue(
+        self, level: Level, message: str, solution: typing.Optional[str] = None
+    ):
         """
         Add an issue with certain `level`, `message`, and an optional `solution`.
         """
@@ -130,23 +130,11 @@ class Notepad(metaclass=abc.ABCMeta):
         """
         self.add_issue(Level.ERROR, message, solution)
 
-    def add_warning(self, message: str, solution: typing.Optional[str] = None):
-        """
-        A convenience function for adding a *warning* with a `message` and an optional `solution`.
-        """
-        self.add_issue(Level.WARN, message, solution)
-
     def errors(self) -> typing.Iterator[Issue]:
         """
         Iterate over the errors of the current section.
         """
         return filter(lambda dsi: dsi.level == Level.ERROR, self.issues)
-
-    def warnings(self) -> typing.Iterator[Issue]:
-        """
-        Iterate over the warnings of the current section.
-        """
-        return filter(lambda dsi: dsi.level == Level.WARN, self.issues)
 
     def error_count(self) -> int:
         """
@@ -155,70 +143,32 @@ class Notepad(metaclass=abc.ABCMeta):
         """
         return sum(1 for _ in self.errors())
 
-    def warning_count(self) -> int:
+    def has_errors(self, include_subsections: bool = False) -> bool:
         """
         Returns:
-            int: count of warnings found in this section.
+            bool: `True` if one or more errors were found in the current section or its subsections.
         """
-        return sum(1 for _ in self.warnings())
+        if include_subsections:
+            for node in self.iterate_nodes():
+                for _ in node.errors():
+                    return True
+        else:
+            for _ in self.errors():
+                return True
 
+        return False
 
-class NotepadTree(Notepad):
-    """
-    `NotepadTree` implements :class:`Notepad` using a tree where each tree node corresponds to a (sub)section. The node
-    can have `0..n` children.
-
-    Each node has a :attr:`label`, a collection of issues, and children with subsections. For convenience, the node
-    has :attr:`level` to correspond to the depth of the node within the tree (the level of the root node is `0`).
-
-    The nodes can be accessed via :attr:`children` property or through convenience methods for tree traversal,
-    either using the visitor pattern (:func:`visit`) or by iterating over the nodes via :func:`iterate_nodes`.
-    In both cases, the traversal is done in the depth-first fashion.
-    """
-
-    def __init__(self, label: str, level: int):
-        super().__init__(label)
-        self._level = level
-        self._children = []
-
-    @property
-    def children(self):
-        return self._children
-
-    @property
-    def level(self) -> int:
-        return self._level
-
-    def add_subsection(self, identifier: str) -> "NotepadTree":
-        sub = NotepadTree(identifier, self._level + 1)
-        self._children.append(sub)
-        return sub
-
-    def visit(self, visitor):
+    def add_warning(self, message: str, solution: typing.Optional[str] = None):
         """
-        Perform a depth-first search on the tree and call `visitor` with all nodes.
-        Args:
-            visitor: a callable that takes the current node as a single argument.
+        A convenience function for adding a *warning* with a `message` and an optional `solution`.
         """
-        stack = [self]
+        self.add_issue(Level.WARN, message, solution)
 
-        while stack:
-            node = stack.pop()
-            # Reversed to visit in the add order.
-            stack.extend(reversed(node.children))
-            visitor(node)
-
-    def iterate_nodes(self):
+    def warnings(self) -> typing.Iterator[Issue]:
         """
-        Iterate over nodes in the depth-first fashion.
-
-        Returns: a depth-first node iterator.
+        Iterate over the warnings of the current section.
         """
-        stack = [self]
-        while stack:
-            node = stack.pop()
-            stack.extend(reversed(node.children))
-            yield node
+        return filter(lambda dsi: dsi.level == Level.WARN, self.issues)
 
     def has_warnings(self, include_subsections: bool = False) -> bool:
         """
@@ -235,20 +185,12 @@ class NotepadTree(Notepad):
 
         return False
 
-    def has_errors(self, include_subsections: bool = False) -> bool:
+    def warning_count(self) -> int:
         """
         Returns:
-            bool: `True` if one or more errors were found in the current section or its subsections.
+            int: count of warnings found in this section.
         """
-        if include_subsections:
-            for node in self.iterate_nodes():
-                for _ in node.errors():
-                    return True
-        else:
-            for _ in self.errors():
-                return True
-
-        return False
+        return sum(1 for _ in self.warnings())
 
     def has_errors_or_warnings(self, include_subsections: bool = False) -> bool:
         """
@@ -269,17 +211,126 @@ class NotepadTree(Notepad):
 
         return False
 
+    def visit(
+        self,
+        visitor: typing.Callable[["Notepad",], None],
+    ):
+        """
+        Performs a depth-first search on the notepad nodes and calls `visitor` with all nodes.
+        Args:
+            visitor: a callable that takes the current notepad node as the only argument.
+        """
+        for node in self.iterate_nodes():
+            visitor(node)
+
+    @abc.abstractmethod
+    def iterate_nodes(self) -> typing.Iterator["Notepad"]:
+        """
+        Iterate over nodes in the depth-first fashion.
+
+        Returns: a depth-first iterator over :class:`Notepad` nodes.
+        """
+        pass
+
+    def summarize(
+        self,
+        file: io.TextIOBase = sys.stdout,
+        indent: int = 2,
+    ):
+        assert isinstance(indent, int) and indent >= 0
+
+        n_errors = sum(node.error_count() for node in self.iterate_nodes())
+        n_warnings = sum(node.warning_count() for node in self.iterate_nodes())
+        if n_errors > 0 or n_warnings > 0:
+            file.write("Showing errors and warnings")
+            file.write(os.linesep)
+
+            for node in self.iterate_nodes():
+                if node.has_errors_or_warnings(include_subsections=True):
+                    # We must report the node label even if there are no issues with the node.
+                    l_pad = " " * (node.level * indent)
+                    file.write(l_pad + node.label)
+                    file.write(os.linesep)
+
+                    if node.has_errors():
+                        file.write(l_pad + " errors:")
+                        file.write(os.linesep)
+                        for error in node.errors():
+                            file.write(
+                                l_pad + " " + error.message + f". {error.solution}"
+                                if error.solution
+                                else ""
+                            )
+                            file.write(os.linesep)
+                    if node.has_warnings():
+                        file.write(l_pad + " warnings:")
+                        file.write(os.linesep)
+                        for warning in node.warnings():
+                            file.write(
+                                l_pad + " ·" + warning.message + f". {warning.solution}"
+                                if warning.solution
+                                else ""
+                            )
+                            file.write(os.linesep)
+        else:
+            file.write("No errors or warnings were found")
+
+
+class NotepadTree(Notepad):
+    """
+    `NotepadTree` implements :class:`Notepad` using a tree where each tree node corresponds to a (sub)section. The node
+    can have `0..n` children.
+
+    Each node has a :attr:`label`, a collection of issues, and children with subsections. For convenience, the node
+    has :attr:`level` to correspond to the depth of the node within the tree (the level of the root node is `0`).
+
+    The nodes can be accessed via :attr:`children` property or through convenience methods for tree traversal,
+    either using the visitor pattern (:func:`visit`) or by iterating over the nodes via :func:`iterate_nodes`.
+    In both cases, the traversal is done in the depth-first fashion.
+    """
+
+    def __init__(
+        self,
+        label: str,
+        level: int,
+    ):
+        super().__init__(label, level)
+        self._children = []
+
+    def add_subsection(self, identifier: str) -> "NotepadTree":
+        sub = NotepadTree(identifier, self._level + 1)
+        self._children.append(sub)
+        return sub
+
+    def iterate_nodes(self) -> typing.Iterator["Notepad"]:
+        """
+        Iterate over nodes in the depth-first fashion.
+
+        Returns: a depth-first node iterator.
+        """
+        stack = [self,]
+        while stack:
+            node = stack.pop()
+            stack.extend(reversed(node._children))
+            yield node
+
     def __str__(self):
         return (
-            'NotepadTree('
-            f'label={self._label}, '
-            f'level={self._level}, '
-            f'children={[ch.identifier for ch in self._children]}'
-            ')'
+            "NotepadTree("
+            f"label={self._label}, "
+            f"level={self._level}, "
+            f"children={[ch.label for ch in self._children]}"
+            ")"
         )
 
 
-class Auditor(typing.Generic[IN, OUT], metaclass=abc.ABCMeta):
+ITEM = typing.TypeVar("ITEM")
+"""
+The input for the :class:`Auditor`.
+"""
+
+
+class Auditor(typing.Generic[ITEM], metaclass=abc.ABCMeta):
     """
     `Auditor` checks the inputs for sanity issues and relates the issues with sanitized inputs
     as :class:`SanitationResults`.
@@ -301,8 +352,12 @@ class Auditor(typing.Generic[IN, OUT], metaclass=abc.ABCMeta):
         return NotepadTree(label, level=0)
 
     @abc.abstractmethod
-    def process(self, data: IN, notepad: Notepad) -> OUT:
+    def process(
+        self,
+        item: ITEM,
+        notepad: Notepad,
+    ):
         """
-        Audit and sanitize the `data`, record the issues to the `notepad` and return the sanitized data.
+        Audit the `item` and record any issues into the `notepad`.
         """
         pass
