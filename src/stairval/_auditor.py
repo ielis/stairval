@@ -29,7 +29,7 @@ class Level(enum.Enum):
 
 class Issue:
     """
-    `DataSanityIssue` summarizes an issue found in the input data.
+    `Issue` summarizes an issue found in the input data.
 
     The issue has a :attr:`level`, a :attr:`message` with human-friendly description,
     and an optional :attr:`solution` for addressing the issue.
@@ -58,7 +58,7 @@ class Issue:
         return self._solution
 
     def __str__(self):
-        return f"DataSanityIssue(level={self._level}, message={self._message}, solution={self._solution})"
+        return f"Issue(level={self._level}, message={self._message}, solution={self._solution})"
 
     def __repr__(self):
         return str(self)
