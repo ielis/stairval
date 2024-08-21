@@ -95,6 +95,15 @@ class Notepad(metaclass=abc.ABCMeta):
         """
         pass
 
+    @abc.abstractmethod
+    def iter_sections(self) -> typing.Iterator["Notepad"]:
+        """
+        Iterate over nodes in the depth-first fashion.
+
+        Returns: a depth-first iterator over :class:`Notepad` nodes.
+        """
+        pass
+
     @property
     def label(self) -> str:
         """
@@ -149,7 +158,7 @@ class Notepad(metaclass=abc.ABCMeta):
             bool: `True` if one or more errors were found in the current section or its subsections.
         """
         if include_subsections:
-            for node in self.iterate_nodes():
+            for node in self.iter_sections():
                 for _ in node.errors():
                     return True
         else:
@@ -176,7 +185,7 @@ class Notepad(metaclass=abc.ABCMeta):
             bool: `True` if one or more warnings were found in the current section or its subsections.
         """
         if include_subsections:
-            for node in self.iterate_nodes():
+            for node in self.iter_sections():
                 for _ in node.warnings():
                     return True
         else:
@@ -198,7 +207,7 @@ class Notepad(metaclass=abc.ABCMeta):
             bool: `True` if one or more errors or warnings were found in the current section or its subsections.
         """
         if include_subsections:
-            for node in self.iterate_nodes():
+            for node in self.iter_sections():
                 for _ in node.warnings():
                     return True
                 for _ in node.errors():
@@ -220,17 +229,8 @@ class Notepad(metaclass=abc.ABCMeta):
         Args:
             visitor: a callable that takes the current notepad node as the only argument.
         """
-        for node in self.iterate_nodes():
+        for node in self.iter_sections():
             visitor(node)
-
-    @abc.abstractmethod
-    def iterate_nodes(self) -> typing.Iterator["Notepad"]:
-        """
-        Iterate over nodes in the depth-first fashion.
-
-        Returns: a depth-first iterator over :class:`Notepad` nodes.
-        """
-        pass
 
     def summarize(
         self,
@@ -239,13 +239,13 @@ class Notepad(metaclass=abc.ABCMeta):
     ):
         assert isinstance(indent, int) and indent >= 0
 
-        n_errors = sum(node.error_count() for node in self.iterate_nodes())
-        n_warnings = sum(node.warning_count() for node in self.iterate_nodes())
+        n_errors = sum(node.error_count() for node in self.iter_sections())
+        n_warnings = sum(node.warning_count() for node in self.iter_sections())
         if n_errors > 0 or n_warnings > 0:
             file.write("Showing errors and warnings")
             file.write(os.linesep)
 
-            for node in self.iterate_nodes():
+            for node in self.iter_sections():
                 if node.has_errors_or_warnings(include_subsections=True):
                     # We must report the node label even if there are no issues with the node.
                     l_pad = " " * (node.level * indent)
@@ -302,7 +302,7 @@ class NotepadTree(Notepad):
         self._children.append(sub)
         return sub
 
-    def iterate_nodes(self) -> typing.Iterator["Notepad"]:
+    def iter_sections(self) -> typing.Iterator["Notepad"]:
         """
         Iterate over nodes in the depth-first fashion.
 
