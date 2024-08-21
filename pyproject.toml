@@ -48,7 +48,7 @@ docs = [
 [project.urls]
 homepage = "https://github.com/ielis/stairval"
 repository = "https://github.com/ielis/stairval.git"
-documentation = "https://github.com/monarch-initiative/phenopacket-store-toolkit"
+documentation = "https://github.com/ielis/stairval"
 bugtracker = "https://github.com/ielis/stairval/issues"
 
 

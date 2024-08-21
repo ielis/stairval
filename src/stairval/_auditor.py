@@ -29,7 +29,7 @@ class Level(enum.Enum):
 
 class Issue:
     """
-    `DataSanityIssue` summarizes an issue found in the input data.
+    `Issue` summarizes an issue found in the input data.
 
     The issue has a :attr:`level`, a :attr:`message` with human-friendly description,
     and an optional :attr:`solution` for addressing the issue.
@@ -58,7 +58,7 @@ class Issue:
         return self._solution
 
     def __str__(self):
-        return f"DataSanityIssue(level={self._level}, message={self._message}, solution={self._solution})"
+        return f"Issue(level={self._level}, message={self._message}, solution={self._solution})"
 
     def __repr__(self):
         return str(self)
@@ -222,7 +222,12 @@ class Notepad(metaclass=abc.ABCMeta):
 
     def visit(
         self,
-        visitor: typing.Callable[["Notepad",], None],
+        visitor: typing.Callable[
+            [
+                "Notepad",
+            ],
+            None,
+        ],
     ):
         """
         Performs a depth-first search on the notepad nodes and calls `visitor` with all nodes.
@@ -246,30 +251,34 @@ class Notepad(metaclass=abc.ABCMeta):
             file.write(os.linesep)
 
             for node in self.iter_sections():
+                if node.level != 0:
+                    file.write(os.linesep)
                 if node.has_errors_or_warnings(include_subsections=True):
                     # We must report the node label even if there are no issues with the node.
-                    l_pad = " " * (node.level * indent)
+                    l_pad = " " * ((node.level + 1) * indent)
                     file.write(l_pad + node.label)
                     file.write(os.linesep)
 
                     if node.has_errors():
-                        file.write(l_pad + " errors:")
+                        file.write(l_pad + "errors:")
                         file.write(os.linesep)
                         for error in node.errors():
                             file.write(
-                                l_pad + " " + error.message + f". {error.solution}"
-                                if error.solution
-                                else ""
+                                l_pad
+                                + "- "
+                                + error.message
+                                + (f"· {error.solution}" if error.solution else "")
                             )
                             file.write(os.linesep)
                     if node.has_warnings():
-                        file.write(l_pad + " warnings:")
+                        file.write(l_pad + "warnings:")
                         file.write(os.linesep)
                         for warning in node.warnings():
                             file.write(
-                                l_pad + " ·" + warning.message + f". {warning.solution}"
-                                if warning.solution
-                                else ""
+                                l_pad
+                                + "- "
+                                + warning.message
+                                + (f"· {warning.solution}" if warning.solution else "")
                             )
                             file.write(os.linesep)
         else:
@@ -308,7 +317,9 @@ class NotepadTree(Notepad):
 
         Returns: a depth-first node iterator.
         """
-        stack = [self,]
+        stack = [
+            self,
+        ]
         while stack:
             node = stack.pop()
             stack.extend(reversed(node._children))
@@ -352,7 +363,7 @@ class Auditor(typing.Generic[ITEM], metaclass=abc.ABCMeta):
         return NotepadTree(label, level=0)
 
     @abc.abstractmethod
-    def process(
+    def audit(
         self,
         item: ITEM,
         notepad: Notepad,

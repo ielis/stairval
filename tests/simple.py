@@ -22,16 +22,6 @@ class Person:
     address: Address
 
 
-class AddressAuditor(Auditor[Address]):
-
-    def process(self, item: Address, notepad: Notepad):
-        if len(item.street) == 0:
-            notepad.add_warning('`street` should not be empty')
-
-        if int(item.zip_code) < 0:
-            notepad.add_error('`zip_code` must not be negative')
-
-
 class PersonAuditor(Auditor[Person]):
 
     def __init__(
@@ -40,13 +30,27 @@ class PersonAuditor(Auditor[Person]):
     ):
         self._address_auditor = address_auditor
 
-    def process(
+    def audit(
         self,
         item: Person,
         notepad: Notepad,
     ) -> Person:
         if item.age < 0:
-            notepad.add_error('`age` must not be negative')
+            notepad.add_error("`age` must not be negative")
 
-        address_notepad = notepad.add_subsection('address')
-        self._address_auditor.process(item.address, address_notepad)
+        address_notepad = notepad.add_subsection("address")
+        self._address_auditor.audit(item.address, address_notepad)
+
+
+class AddressAuditor(Auditor[Address]):
+
+    def audit(
+        self,
+        item: Address,
+        notepad: Notepad,
+    ):
+        if len(item.street) == 0:
+            notepad.add_warning("`street` should not be empty")
+
+        if int(item.zip_code) < 0:
+            notepad.add_error("`zip_code` must not be negative")
