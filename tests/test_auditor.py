@@ -7,7 +7,7 @@ from .simple import Person, Address, PersonAuditor, AddressAuditor
 
 class TestAuditor:
 
-    @pytest.fixture(scope='class')
+    @pytest.fixture(scope="class")
     def auditor(self) -> PersonAuditor:
         return PersonAuditor(
             address_auditor=AddressAuditor(),
@@ -25,13 +25,46 @@ class TestAuditor:
                 city="West Hartford",
                 zip_code="06119",
                 country="United States of America",
-            )
+            ),
         )
 
-        notepad = auditor.prepare_notepad('person')
+        notepad = auditor.prepare_notepad("person")
         auditor.process(person, notepad)
 
         buf = io.StringIO()
         notepad.summarize(file=buf)
 
         assert buf.getvalue() == "No errors or warnings were found"
+
+    def test_few_errors(
+        self,
+        auditor: PersonAuditor,
+    ):
+        person = Person(
+            name="Crooked Joe",
+            age=-9,
+            address=Address(
+                street="",
+                city="West Hartford",
+                zip_code="-12345",
+                country="United States of America",
+            ),
+        )
+
+        notepad = auditor.prepare_notepad("person")
+        auditor.process(person, notepad)
+
+        buf = io.StringIO()
+        notepad.summarize(file=buf)
+
+        assert buf.getvalue() == """Showing errors and warnings
+  person
+  errors:
+  - `age` must not be negative
+
+    address
+    errors:
+    - `zip_code` must not be negative
+    warnings:
+    - `street` should not be empty
+"""
