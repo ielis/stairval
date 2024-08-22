@@ -281,6 +281,7 @@ class Notepad(metaclass=abc.ABCMeta):
                             file.write(os.linesep)
         else:
             file.write("No errors or warnings were found")
+            file.write(os.linesep)
 
 
 class NotepadTree(Notepad):
