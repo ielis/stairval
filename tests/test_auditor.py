@@ -61,7 +61,6 @@ class TestAuditor:
   person
   errors:
   - `age` must not be negative
-
     address
     errors:
     - `zip_code` must not be negative

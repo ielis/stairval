@@ -251,8 +251,6 @@ class Notepad(metaclass=abc.ABCMeta):
             file.write(os.linesep)
 
             for node in self.iter_sections():
-                if node.level != 0:
-                    file.write(os.linesep)
                 if node.has_errors_or_warnings(include_subsections=True):
                     # We must report the node label even if there are no issues with the node.
                     l_pad = " " * ((node.level + 1) * indent)
