@@ -10,7 +10,7 @@ requires-python = ">=3.8"
 description = "Validation framework for hierarchical data structures"
 readme = "README.md"
 authors = [
-    {name = "Daniel Danis", email="daniel.danis@bih-charite.de"},
+    {name = "Daniel Danis", email="daniel.gordon.danis@protonmail.com"},
 ]
 license = { file = "LICENSE" }
 classifiers = [
