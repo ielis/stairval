@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>stairval._auditor &mdash; Stairval 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/stairval.css?v=a9fa5eb9" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Stairval
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Setup &amp; User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user-guide/index.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidocs/modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Stairval</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">stairval._auditor</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for stairval._auditor</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">import</span> <span class="nn">enum</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+
+
+<div class="viewcode-block" id="Level">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Level">[docs]</a>
+<span class="k">class</span> <span class="nc">Level</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An enum to represent severity of the :class:`DataSanityIssue`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">WARN</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Warning is an issue when something not entirely right. However, unlike :class:`Level.ERROR`,</span>
+<span class="sd">    the analysis should complete albeit with sub-optimal results 😧.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ERROR</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Error is a serious issue in the input data and the downstream analysis may not complete or the analysis results</span>
+<span class="sd">    may be malarkey 😱.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div>
+
+
+
+<div class="viewcode-block" id="Issue">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Issue">[docs]</a>
+<span class="k">class</span> <span class="nc">Issue</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `Issue` summarizes an issue found in the input data.</span>
+
+<span class="sd">    The issue has a :attr:`level`, a :attr:`message` with human-friendly description,</span>
+<span class="sd">    and an optional :attr:`solution` for addressing the issue.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">level</span><span class="p">:</span> <span class="n">Level</span><span class="p">,</span>
+        <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">solution</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_level</span> <span class="o">=</span> <span class="n">level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message</span> <span class="o">=</span> <span class="n">message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_solution</span> <span class="o">=</span> <span class="n">solution</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">level</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Level</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_level</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_message</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">solution</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_solution</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Issue(level=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_level</span><span class="si">}</span><span class="s2">, message=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_message</span><span class="si">}</span><span class="s2">, solution=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_solution</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Notepad">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad">[docs]</a>
+<span class="k">class</span> <span class="nc">Notepad</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Record issues encountered during parsing/validation of a hierarchical data structure.</span>
+
+<span class="sd">    The issues can be organized in sections. `Notepad` keeps track of issues in one section</span>
+<span class="sd">    and the subsections can be created by calling :func:`add_subsection`.</span>
+<span class="sd">    The function returns an instance responsible for issues of a subsection.</span>
+
+<span class="sd">    A collection of the issues from the current section are available via :attr:`issues` property</span>
+<span class="sd">    and the convenience functions provide iterators over error and warnings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">level</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label</span> <span class="o">=</span> <span class="n">label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_level</span> <span class="o">=</span> <span class="n">level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_issues</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">MutableSequence</span><span class="p">[</span><span class="n">Issue</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="Notepad.add_subsection">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad.add_subsection">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">add_subsection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Notepad&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a labeled subsection.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Notepad: a notepad for recording issues within the subsection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Notepad.iter_sections">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad.iter_sections">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">iter_sections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="s2">&quot;Notepad&quot;</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Iterate over nodes in the depth-first fashion.</span>
+
+<span class="sd">        Returns: a depth-first iterator over :class:`Notepad` nodes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the section label.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">level</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the level of the notepad node (distance from the top-level hierarchy node).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_level</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">issues</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Issue</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get an iterable with the issues of the current section.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_issues</span>
+
+<div class="viewcode-block" id="Notepad.add_issue">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad.add_issue">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_issue</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="n">Level</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add an issue with certain `level`, `message`, and an optional `solution`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Issue</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">solution</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Notepad.add_error">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad.add_error">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A convenience function for adding an *error* with a `message` and an optional `solution`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_issue</span><span class="p">(</span><span class="n">Level</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">solution</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Notepad.errors">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad.errors">[docs]</a>
+    <span class="k">def</span> <span class="nf">errors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Issue</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Iterate over the errors of the current section.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">dsi</span><span class="p">:</span> <span class="n">dsi</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="n">Level</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">issues</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Notepad.error_count">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad.error_count">[docs]</a>
+    <span class="k">def</span> <span class="nf">error_count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            int: count of errors found in this section.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="Notepad.has_errors">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad.has_errors">[docs]</a>
+    <span class="k">def</span> <span class="nf">has_errors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_subsections</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: `True` if one or more errors were found in the current section or its subsections.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">include_subsections</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_sections</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">errors</span><span class="p">():</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">():</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Notepad.add_warning">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad.add_warning">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A convenience function for adding a *warning* with a `message` and an optional `solution`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_issue</span><span class="p">(</span><span class="n">Level</span><span class="o">.</span><span class="n">WARN</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">solution</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Notepad.warnings">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad.warnings">[docs]</a>
+    <span class="k">def</span> <span class="nf">warnings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Issue</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Iterate over the warnings of the current section.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">dsi</span><span class="p">:</span> <span class="n">dsi</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="n">Level</span><span class="o">.</span><span class="n">WARN</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">issues</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Notepad.has_warnings">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad.has_warnings">[docs]</a>
+    <span class="k">def</span> <span class="nf">has_warnings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_subsections</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: `True` if one or more warnings were found in the current section or its subsections.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">include_subsections</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_sections</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">warnings</span><span class="p">():</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="p">():</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Notepad.warning_count">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad.warning_count">[docs]</a>
+    <span class="k">def</span> <span class="nf">warning_count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            int: count of warnings found in this section.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="Notepad.has_errors_or_warnings">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad.has_errors_or_warnings">[docs]</a>
+    <span class="k">def</span> <span class="nf">has_errors_or_warnings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_subsections</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: `True` if one or more errors or warnings were found in the current section or its subsections.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">include_subsections</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_sections</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">warnings</span><span class="p">():</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">errors</span><span class="p">():</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="p">():</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">():</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Notepad.visit">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad.visit">[docs]</a>
+    <span class="k">def</span> <span class="nf">visit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">visitor</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Callable</span><span class="p">[</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;Notepad&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="kc">None</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs a depth-first search on the notepad nodes and calls `visitor` with all nodes.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            visitor: a callable that takes the current notepad node as the only argument.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_sections</span><span class="p">():</span>
+            <span class="n">visitor</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Notepad.summarize">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Notepad.summarize">[docs]</a>
+    <span class="k">def</span> <span class="nf">summarize</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">file</span><span class="p">:</span> <span class="n">io</span><span class="o">.</span><span class="n">TextIOBase</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
+        <span class="n">indent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">indent</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">indent</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+
+        <span class="n">n_errors</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">error_count</span><span class="p">()</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_sections</span><span class="p">())</span>
+        <span class="n">n_warnings</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">warning_count</span><span class="p">()</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_sections</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">n_errors</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">n_warnings</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Showing errors and warnings&quot;</span><span class="p">)</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_sections</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">level</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">has_errors_or_warnings</span><span class="p">(</span><span class="n">include_subsections</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                    <span class="c1"># We must report the node label even if there are no issues with the node.</span>
+                    <span class="n">l_pad</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="p">((</span><span class="n">node</span><span class="o">.</span><span class="n">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">indent</span><span class="p">)</span>
+                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">l_pad</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+                    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">has_errors</span><span class="p">():</span>
+                        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">l_pad</span> <span class="o">+</span> <span class="s2">&quot;errors:&quot;</span><span class="p">)</span>
+                        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">errors</span><span class="p">():</span>
+                            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                                <span class="n">l_pad</span>
+                                <span class="o">+</span> <span class="s2">&quot;- &quot;</span>
+                                <span class="o">+</span> <span class="n">error</span><span class="o">.</span><span class="n">message</span>
+                                <span class="o">+</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;· </span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">solution</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">solution</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                            <span class="p">)</span>
+                            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">has_warnings</span><span class="p">():</span>
+                        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">l_pad</span> <span class="o">+</span> <span class="s2">&quot;warnings:&quot;</span><span class="p">)</span>
+                        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">warning</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">warnings</span><span class="p">():</span>
+                            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                                <span class="n">l_pad</span>
+                                <span class="o">+</span> <span class="s2">&quot;- &quot;</span>
+                                <span class="o">+</span> <span class="n">warning</span><span class="o">.</span><span class="n">message</span>
+                                <span class="o">+</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;· </span><span class="si">{</span><span class="n">warning</span><span class="o">.</span><span class="n">solution</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">warning</span><span class="o">.</span><span class="n">solution</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                            <span class="p">)</span>
+                            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;No errors or warnings were found&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">class</span> <span class="nc">NotepadTree</span><span class="p">(</span><span class="n">Notepad</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `NotepadTree` implements :class:`Notepad` using a tree where each tree node corresponds to a (sub)section. The node</span>
+<span class="sd">    can have `0..n` children.</span>
+
+<span class="sd">    Each node has a :attr:`label`, a collection of issues, and children with subsections. For convenience, the node</span>
+<span class="sd">    has :attr:`level` to correspond to the depth of the node within the tree (the level of the root node is `0`).</span>
+
+<span class="sd">    The nodes can be accessed via :attr:`children` property or through convenience methods for tree traversal,</span>
+<span class="sd">    either using the visitor pattern (:func:`visit`) or by iterating over the nodes via :func:`iterate_nodes`.</span>
+<span class="sd">    In both cases, the traversal is done in the depth-first fashion.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">level</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_children</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">add_subsection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NotepadTree&quot;</span><span class="p">:</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="n">NotepadTree</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sub</span>
+
+    <span class="k">def</span> <span class="nf">iter_sections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="s2">&quot;Notepad&quot;</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Iterate over nodes in the depth-first fashion.</span>
+
+<span class="sd">        Returns: a depth-first node iterator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">while</span> <span class="n">stack</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">stack</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">_children</span><span class="p">))</span>
+            <span class="k">yield</span> <span class="n">node</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s2">&quot;NotepadTree(&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;label=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_label</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;level=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_level</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;children=</span><span class="si">{</span><span class="p">[</span><span class="n">ch</span><span class="o">.</span><span class="n">label</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">ch</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;)&quot;</span>
+        <span class="p">)</span>
+
+
+<span class="n">ITEM</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;ITEM&quot;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The input for the :class:`Auditor`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="Auditor">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Auditor">[docs]</a>
+<span class="k">class</span> <span class="nc">Auditor</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Generic</span><span class="p">[</span><span class="n">ITEM</span><span class="p">],</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `Auditor` checks the inputs for sanity issues and relates the issues with sanitized inputs</span>
+<span class="sd">    as :class:`SanitationResults`.</span>
+
+<span class="sd">    The auditor may sanitize the input as a matter of discretion and returns the input as `OUT`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Auditor.prepare_notepad">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Auditor.prepare_notepad">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">prepare_notepad</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Notepad</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepare a :class:`Notepad` for recording issues and errors.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            label: a `str` with the top-level section label.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            NotepadTree: an instance of :class:`NotepadTree`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">NotepadTree</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Auditor.audit">
+<a class="viewcode-back" href="../../apidocs/stairval.html#stairval.Auditor.audit">[docs]</a>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">audit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">item</span><span class="p">:</span> <span class="n">ITEM</span><span class="p">,</span>
+        <span class="n">notepad</span><span class="p">:</span> <span class="n">Notepad</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Audit the `item` and record any issues into the `notepad`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

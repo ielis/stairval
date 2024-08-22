@@ -1,0 +1,7 @@
+stairval package
+================
+
+.. automodule:: stairval
+   :members:
+   :undoc-members:
+   :show-inheritance:

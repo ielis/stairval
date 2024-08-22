@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>stairval package &mdash; Stairval 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/stairval.css?v=a9fa5eb9" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="API reference" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Stairval
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Setup &amp; User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide/index.html">User guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">stairval package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#stairval.Auditor"><code class="docutils literal notranslate"><span class="pre">Auditor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Auditor.prepare_notepad"><code class="docutils literal notranslate"><span class="pre">Auditor.prepare_notepad()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Auditor.audit"><code class="docutils literal notranslate"><span class="pre">Auditor.audit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#stairval.Notepad"><code class="docutils literal notranslate"><span class="pre">Notepad</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.add_subsection"><code class="docutils literal notranslate"><span class="pre">Notepad.add_subsection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.iter_sections"><code class="docutils literal notranslate"><span class="pre">Notepad.iter_sections()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.label"><code class="docutils literal notranslate"><span class="pre">Notepad.label</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.level"><code class="docutils literal notranslate"><span class="pre">Notepad.level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.issues"><code class="docutils literal notranslate"><span class="pre">Notepad.issues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.add_issue"><code class="docutils literal notranslate"><span class="pre">Notepad.add_issue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.add_error"><code class="docutils literal notranslate"><span class="pre">Notepad.add_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.errors"><code class="docutils literal notranslate"><span class="pre">Notepad.errors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.error_count"><code class="docutils literal notranslate"><span class="pre">Notepad.error_count()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.has_errors"><code class="docutils literal notranslate"><span class="pre">Notepad.has_errors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.add_warning"><code class="docutils literal notranslate"><span class="pre">Notepad.add_warning()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.warnings"><code class="docutils literal notranslate"><span class="pre">Notepad.warnings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.has_warnings"><code class="docutils literal notranslate"><span class="pre">Notepad.has_warnings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.warning_count"><code class="docutils literal notranslate"><span class="pre">Notepad.warning_count()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.has_errors_or_warnings"><code class="docutils literal notranslate"><span class="pre">Notepad.has_errors_or_warnings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.visit"><code class="docutils literal notranslate"><span class="pre">Notepad.visit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Notepad.summarize"><code class="docutils literal notranslate"><span class="pre">Notepad.summarize()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#stairval.Issue"><code class="docutils literal notranslate"><span class="pre">Issue</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Issue.level"><code class="docutils literal notranslate"><span class="pre">Issue.level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Issue.message"><code class="docutils literal notranslate"><span class="pre">Issue.message</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Issue.solution"><code class="docutils literal notranslate"><span class="pre">Issue.solution</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#stairval.Level"><code class="docutils literal notranslate"><span class="pre">Level</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Level.WARN"><code class="docutils literal notranslate"><span class="pre">Level.WARN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stairval.Level.ERROR"><code class="docutils literal notranslate"><span class="pre">Level.ERROR</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Stairval</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API reference</a></li>
+      <li class="breadcrumb-item active">stairval package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apidocs/stairval.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-stairval">
+<span id="stairval-package"></span><h1>stairval package<a class="headerlink" href="#module-stairval" title="Link to this heading"></a></h1>
+<p>Stairval is a framework for validating hierarchical data structures.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="stairval.Auditor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stairval.</span></span><span class="sig-name descname"><span class="pre">Auditor</span></span><a class="reference internal" href="../_modules/stairval/_auditor.html#Auditor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Auditor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generic" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">ITEM</span></code>]</p>
+<p><cite>Auditor</cite> checks the inputs for sanity issues and relates the issues with sanitized inputs
+as <code class="xref py py-class docutils literal notranslate"><span class="pre">SanitationResults</span></code>.</p>
+<p>The auditor may sanitize the input as a matter of discretion and returns the input as <cite>OUT</cite>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Auditor.prepare_notepad">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prepare_notepad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#stairval.Notepad" title="stairval._auditor.Notepad"><span class="pre">Notepad</span></a></span></span><a class="reference internal" href="../_modules/stairval/_auditor.html#Auditor.prepare_notepad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Auditor.prepare_notepad" title="Link to this definition"></a></dt>
+<dd><p>Prepare a <a class="reference internal" href="#stairval.Notepad" title="stairval.Notepad"><code class="xref py py-class docutils literal notranslate"><span class="pre">Notepad</span></code></a> for recording issues and errors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>label</strong> – a <cite>str</cite> with the top-level section label.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">NotepadTree</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NotepadTree</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Auditor.audit">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">audit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ITEM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notepad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#stairval.Notepad" title="stairval._auditor.Notepad"><span class="pre">Notepad</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stairval/_auditor.html#Auditor.audit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Auditor.audit" title="Link to this definition"></a></dt>
+<dd><p>Audit the <cite>item</cite> and record any issues into the <cite>notepad</cite>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stairval.Notepad">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stairval.</span></span><span class="sig-name descname"><span class="pre">Notepad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Record issues encountered during parsing/validation of a hierarchical data structure.</p>
+<p>The issues can be organized in sections. <cite>Notepad</cite> keeps track of issues in one section
+and the subsections can be created by calling <a class="reference internal" href="#stairval.Notepad.add_subsection" title="stairval.Notepad.add_subsection"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_subsection()</span></code></a>.
+The function returns an instance responsible for issues of a subsection.</p>
+<p>A collection of the issues from the current section are available via <a class="reference internal" href="#stairval.Notepad.issues" title="stairval.Notepad.issues"><code class="xref py py-attr docutils literal notranslate"><span class="pre">issues</span></code></a> property
+and the convenience functions provide iterators over error and warnings.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Notepad.add_subsection">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_subsection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#stairval.Notepad" title="stairval._auditor.Notepad"><span class="pre">Notepad</span></a></span></span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad.add_subsection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad.add_subsection" title="Link to this definition"></a></dt>
+<dd><p>Add a labeled subsection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a notepad for recording issues within the subsection.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#stairval.Notepad" title="stairval.Notepad">Notepad</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Notepad.iter_sections">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">iter_sections</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.12)"><span class="pre">Iterator</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#stairval.Notepad" title="stairval._auditor.Notepad"><span class="pre">Notepad</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad.iter_sections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad.iter_sections" title="Link to this definition"></a></dt>
+<dd><p>Iterate over nodes in the depth-first fashion.</p>
+<p>Returns: a depth-first iterator over <a class="reference internal" href="#stairval.Notepad" title="stairval.Notepad"><code class="xref py py-class docutils literal notranslate"><span class="pre">Notepad</span></code></a> nodes.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="stairval.Notepad.label">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">label</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="headerlink" href="#stairval.Notepad.label" title="Link to this definition"></a></dt>
+<dd><p>Get the section label.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="stairval.Notepad.level">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></em><a class="headerlink" href="#stairval.Notepad.level" title="Link to this definition"></a></dt>
+<dd><p>Get the level of the notepad node (distance from the top-level hierarchy node).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="stairval.Notepad.issues">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">issues</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.12)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#stairval.Issue" title="stairval._auditor.Issue"><span class="pre">Issue</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#stairval.Notepad.issues" title="Link to this definition"></a></dt>
+<dd><p>Get an iterable with the issues of the current section.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Notepad.add_issue">
+<span class="sig-name descname"><span class="pre">add_issue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#stairval.Level" title="stairval._auditor.Level"><span class="pre">Level</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad.add_issue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad.add_issue" title="Link to this definition"></a></dt>
+<dd><p>Add an issue with certain <cite>level</cite>, <cite>message</cite>, and an optional <cite>solution</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Notepad.add_error">
+<span class="sig-name descname"><span class="pre">add_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad.add_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad.add_error" title="Link to this definition"></a></dt>
+<dd><p>A convenience function for adding an <em>error</em> with a <cite>message</cite> and an optional <cite>solution</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Notepad.errors">
+<span class="sig-name descname"><span class="pre">errors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.12)"><span class="pre">Iterator</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#stairval.Issue" title="stairval._auditor.Issue"><span class="pre">Issue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad.errors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad.errors" title="Link to this definition"></a></dt>
+<dd><p>Iterate over the errors of the current section.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Notepad.error_count">
+<span class="sig-name descname"><span class="pre">error_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad.error_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad.error_count" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>count of errors found in this section.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Notepad.has_errors">
+<span class="sig-name descname"><span class="pre">has_errors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_subsections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad.has_errors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad.has_errors" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>True</cite> if one or more errors were found in the current section or its subsections.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Notepad.add_warning">
+<span class="sig-name descname"><span class="pre">add_warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad.add_warning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad.add_warning" title="Link to this definition"></a></dt>
+<dd><p>A convenience function for adding a <em>warning</em> with a <cite>message</cite> and an optional <cite>solution</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Notepad.warnings">
+<span class="sig-name descname"><span class="pre">warnings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.12)"><span class="pre">Iterator</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#stairval.Issue" title="stairval._auditor.Issue"><span class="pre">Issue</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad.warnings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad.warnings" title="Link to this definition"></a></dt>
+<dd><p>Iterate over the warnings of the current section.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Notepad.has_warnings">
+<span class="sig-name descname"><span class="pre">has_warnings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_subsections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad.has_warnings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad.has_warnings" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>True</cite> if one or more warnings were found in the current section or its subsections.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Notepad.warning_count">
+<span class="sig-name descname"><span class="pre">warning_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad.warning_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad.warning_count" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>count of warnings found in this section.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Notepad.has_errors_or_warnings">
+<span class="sig-name descname"><span class="pre">has_errors_or_warnings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_subsections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad.has_errors_or_warnings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad.has_errors_or_warnings" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>True</cite> if one or more errors or warnings were found in the current section or its subsections.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Notepad.visit">
+<span class="sig-name descname"><span class="pre">visit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visitor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.12)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#stairval.Notepad" title="stairval._auditor.Notepad"><span class="pre">Notepad</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad.visit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad.visit" title="Link to this definition"></a></dt>
+<dd><p>Performs a depth-first search on the notepad nodes and calls <cite>visitor</cite> with all nodes.
+:param visitor: a callable that takes the current notepad node as the only argument.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="stairval.Notepad.summarize">
+<span class="sig-name descname"><span class="pre">summarize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file:</span> <span class="pre">~io.TextIOBase</span> <span class="pre">=</span> <span class="pre">&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stairval/_auditor.html#Notepad.summarize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Notepad.summarize" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stairval.Issue">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stairval.</span></span><span class="sig-name descname"><span class="pre">Issue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#stairval.Level" title="stairval._auditor.Level"><span class="pre">Level</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stairval/_auditor.html#Issue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Issue" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p><cite>Issue</cite> summarizes an issue found in the input data.</p>
+<p>The issue has a <a class="reference internal" href="#stairval.Issue.level" title="stairval.Issue.level"><code class="xref py py-attr docutils literal notranslate"><span class="pre">level</span></code></a>, a <a class="reference internal" href="#stairval.Issue.message" title="stairval.Issue.message"><code class="xref py py-attr docutils literal notranslate"><span class="pre">message</span></code></a> with human-friendly description,
+and an optional <a class="reference internal" href="#stairval.Issue.solution" title="stairval.Issue.solution"><code class="xref py py-attr docutils literal notranslate"><span class="pre">solution</span></code></a> for addressing the issue.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="stairval.Issue.level">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#stairval.Level" title="stairval._auditor.Level"><span class="pre">Level</span></a></em><a class="headerlink" href="#stairval.Issue.level" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="stairval.Issue.message">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="headerlink" href="#stairval.Issue.message" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="stairval.Issue.solution">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">solution</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></em><a class="headerlink" href="#stairval.Issue.solution" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="stairval.Level">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">stairval.</span></span><span class="sig-name descname"><span class="pre">Level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stairval/_auditor.html#Level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.Level" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a></p>
+<p>An enum to represent severity of the <code class="xref py py-class docutils literal notranslate"><span class="pre">DataSanityIssue</span></code>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stairval.Level.WARN">
+<span class="sig-name descname"><span class="pre">WARN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#stairval.Level.WARN" title="Link to this definition"></a></dt>
+<dd><p>Warning is an issue when something not entirely right. However, unlike <a class="reference internal" href="#stairval.Level.ERROR" title="stairval.Level.ERROR"><code class="xref py py-class docutils literal notranslate"><span class="pre">Level.ERROR</span></code></a>,
+the analysis should complete albeit with sub-optimal results 😧.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="stairval.Level.ERROR">
+<span class="sig-name descname"><span class="pre">ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#stairval.Level.ERROR" title="Link to this definition"></a></dt>
+<dd><p>Error is a serious issue in the input data and the downstream analysis may not complete or the analysis results
+may be malarkey 😱.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="API reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
