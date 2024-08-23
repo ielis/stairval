@@ -1,5 +1,6 @@
 import pytest
 import io
+import os
 
 
 from .simple import Person, Address, PersonAuditor, AddressAuditor
@@ -34,7 +35,7 @@ class TestAuditor:
         buf = io.StringIO()
         notepad.summarize(file=buf)
 
-        assert buf.getvalue() == "No errors or warnings were found"
+        assert buf.getvalue() == "No errors or warnings were found" + os.linesep
 
     def test_few_errors(
         self,
@@ -67,3 +68,8 @@ class TestAuditor:
     warnings:
     - `street` should not be empty
 """
+
+    def test_add_subsections(
+        self,
+    ):
+        pass

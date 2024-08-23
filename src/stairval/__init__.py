@@ -2,8 +2,8 @@
 Stairval is a framework for validating hierarchical data structures.
 """
 
-
-from ._auditor import Auditor, Notepad, ITEM, Issue, Level
+from ._api import Level, Issue
+from ._auditor import Auditor, ITEM
 
 __version__ = "0.1.1.dev0"
 
