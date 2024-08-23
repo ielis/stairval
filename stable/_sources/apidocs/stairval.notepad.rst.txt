@@ -1,0 +1,7 @@
+stairval.notepad package
+========================
+
+.. automodule:: stairval.notepad
+   :members:
+   :undoc-members:
+   :show-inheritance:
