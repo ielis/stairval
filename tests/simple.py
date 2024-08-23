@@ -1,6 +1,7 @@
 import dataclasses
 
-from stairval import Auditor, Notepad
+from stairval import Auditor
+from stairval.notepad import Notepad
 
 """
 A toy implementation of person and address auditors.
