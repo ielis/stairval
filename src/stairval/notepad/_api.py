@@ -1,5 +1,4 @@
 import abc
-import io
 import os
 import sys
 import typing
@@ -41,13 +40,29 @@ class Notepad(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
+    def get_subsections(self) -> typing.Sequence["Notepad"]:
+        """
+        Get a sequence with subsections.
+
+        Returns: a sequence of the subsection nodes.
+        """
+        ...
+
     def iter_sections(self) -> typing.Iterator["Notepad"]:
         """
         Iterate over nodes in the depth-first fashion.
 
+        The iterator also includes the *current* node.
+
         Returns: a depth-first iterator over :class:`Notepad` nodes.
         """
-        pass
+        stack = [
+            self,
+        ]
+        while stack:
+            node = stack.pop()
+            stack.extend(reversed(node.get_subsections()))  # type: ignore
+            yield node
 
     def add_subsection(self, label: str) -> "Notepad":
         """
@@ -78,9 +93,7 @@ class Notepad(metaclass=abc.ABCMeta):
         """
         return self._issues
 
-    def add_issue(
-        self, level: Level, message: str, solution: typing.Optional[str] = None
-    ):
+    def add_issue(self, level: Level, message: str, solution: typing.Optional[str] = None):
         """
         Add an issue with certain `level`, `message`, and an optional `solution`.
         """
@@ -104,6 +117,13 @@ class Notepad(metaclass=abc.ABCMeta):
             int: count of errors found in this section.
         """
         return sum(1 for _ in self.errors())
+
+    def has_subsections(self) -> bool:
+        """
+        Returns:
+            True: if the notepad has one or more subsections.
+        """
+        return len(self.get_subsections()) > 0
 
     def has_errors(self, include_subsections: bool = False) -> bool:
         """
@@ -192,7 +212,7 @@ class Notepad(metaclass=abc.ABCMeta):
 
     def summarize(
         self,
-        file: io.TextIOBase = sys.stdout,
+        file: typing.TextIO = sys.stdout,
         indent: int = 2,
     ):
         assert isinstance(indent, int) and indent >= 0
@@ -214,22 +234,14 @@ class Notepad(metaclass=abc.ABCMeta):
                         file.write(l_pad + "errors:")
                         file.write(os.linesep)
                         for error in node.errors():
-                            file.write(
-                                l_pad
-                                + "- "
-                                + error.message
-                                + (f"· {error.solution}" if error.solution else "")
-                            )
+                            file.write(l_pad + "- " + error.message + (f"· {error.solution}" if error.solution else ""))
                             file.write(os.linesep)
                     if node.has_warnings():
                         file.write(l_pad + "warnings:")
                         file.write(os.linesep)
                         for warning in node.warnings():
                             file.write(
-                                l_pad
-                                + "- "
-                                + warning.message
-                                + (f"· {warning.solution}" if warning.solution else "")
+                                l_pad + "- " + warning.message + (f"· {warning.solution}" if warning.solution else "")
                             )
                             file.write(os.linesep)
         else:

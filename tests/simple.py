@@ -24,7 +24,6 @@ class Person:
 
 
 class PersonAuditor(Auditor[Person]):
-
     def __init__(
         self,
         address_auditor: Auditor[Address],
@@ -35,7 +34,7 @@ class PersonAuditor(Auditor[Person]):
         self,
         item: Person,
         notepad: Notepad,
-    ) -> Person:
+    ):
         if item.age < 0:
             notepad.add_error("`age` must not be negative")
 
@@ -44,7 +43,6 @@ class PersonAuditor(Auditor[Person]):
 
 
 class AddressAuditor(Auditor[Address]):
-
     def audit(
         self,
         item: Address,
