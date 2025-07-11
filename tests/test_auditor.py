@@ -57,16 +57,15 @@ class TestAuditor:
         buf = io.StringIO()
         notepad.summarize(file=buf)
 
-        assert (
-            buf.getvalue()
-            == """Showing errors and warnings
-  person
-  errors:
-  - `age` must not be negative
-    address
-    errors:
-    - `zip_code` must not be negative
-    warnings:
-    - `street` should not be empty
-"""
-        )
+        expected = [
+            "Showing errors and warnings",
+            "  person",
+            "  errors:",
+            "  - `age` must not be negative",
+            "    address",
+            "    errors:",
+            "    - `zip_code` must not be negative",
+            "    warnings:",
+            "    - `street` should not be empty",
+        ]
+        assert buf.getvalue() == (os.linesep.join(expected) + os.linesep)
