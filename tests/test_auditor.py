@@ -68,8 +68,3 @@ class TestAuditor:
     warnings:
     - `street` should not be empty
 """
-
-    def test_add_subsections(
-        self,
-    ):
-        pass

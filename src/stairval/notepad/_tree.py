@@ -39,23 +39,14 @@ class NotepadTree(Notepad):
         for label in labels:
             parent = self if len(nodes) == 0 else nodes[-1]
             node = NotepadTree(label, parent.level + 1)
+            parent._children.append(node)
             nodes.append(node)
 
-        return tuple(nodes)
+        return nodes
 
-    def iter_sections(self) -> typing.Iterator["Notepad"]:
-        """
-        Iterate over nodes in the depth-first fashion.
+    def get_subsections(self) -> typing.Sequence[Notepad]:
+        return self._children
 
-        Returns: a depth-first node iterator.
-        """
-        stack = [
-            self,
-        ]
-        while stack:
-            node = stack.pop()
-            stack.extend(reversed(node._children))
-            yield node
 
     def __str__(self):
         return (
