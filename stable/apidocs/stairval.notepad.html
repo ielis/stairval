@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>stairval.notepad package &mdash; Stairval 0.2.0 documentation</title>
+  <title>stairval.notepad package &mdash; Stairval 0.2.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=938c9ccc"></script>
+      <script src="../_static/documentation_options.js?v=37f418d5"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -172,6 +172,13 @@ and the convenience functions provide iterators over error and warnings.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="stairval.notepad.Notepad.get_subsections">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_subsections</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.13)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#stairval.notepad.Notepad" title="stairval.notepad._api.Notepad"><span class="pre">Notepad</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/stairval/notepad/_api.html#Notepad.get_subsections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.notepad.Notepad.get_subsections" title="Link to this definition"></a></dt>
+<dd><p>Get a sequence with subsections.</p>
+<p>Returns: a sequence of the subsection nodes.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="stairval.notepad.Notepad.has_errors">
 <span class="sig-name descname"><span class="pre">has_errors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_subsections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../_modules/stairval/notepad/_api.html#Notepad.has_errors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.notepad.Notepad.has_errors" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -198,6 +205,19 @@ and the convenience functions provide iterators over error and warnings.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="stairval.notepad.Notepad.has_subsections">
+<span class="sig-name descname"><span class="pre">has_subsections</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../_modules/stairval/notepad/_api.html#Notepad.has_subsections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.notepad.Notepad.has_subsections" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>if the notepad has one or more subsections.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>True</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="stairval.notepad.Notepad.has_warnings">
 <span class="sig-name descname"><span class="pre">has_warnings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_subsections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../_modules/stairval/notepad/_api.html#Notepad.has_warnings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.notepad.Notepad.has_warnings" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -218,8 +238,9 @@ and the convenience functions provide iterators over error and warnings.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="stairval.notepad.Notepad.iter_sections">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">iter_sections</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.13)"><span class="pre">Iterator</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#stairval.notepad.Notepad" title="stairval.notepad._api.Notepad"><span class="pre">Notepad</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/stairval/notepad/_api.html#Notepad.iter_sections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.notepad.Notepad.iter_sections" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">iter_sections</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.13)"><span class="pre">Iterator</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#stairval.notepad.Notepad" title="stairval.notepad._api.Notepad"><span class="pre">Notepad</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/stairval/notepad/_api.html#Notepad.iter_sections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.notepad.Notepad.iter_sections" title="Link to this definition"></a></dt>
 <dd><p>Iterate over nodes in the depth-first fashion.</p>
+<p>The iterator also includes the <em>current</em> node.</p>
 <p>Returns: a depth-first iterator over <a class="reference internal" href="#stairval.notepad.Notepad" title="stairval.notepad.Notepad"><code class="xref py py-class docutils literal notranslate"><span class="pre">Notepad</span></code></a> nodes.</p>
 </dd></dl>
 
@@ -237,7 +258,7 @@ and the convenience functions provide iterators over error and warnings.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="stairval.notepad.Notepad.summarize">
-<span class="sig-name descname"><span class="pre">summarize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file:</span> <span class="pre">~io.TextIOBase</span> <span class="pre">=</span> <span class="pre">&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stairval/notepad/_api.html#Notepad.summarize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.notepad.Notepad.summarize" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">summarize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file:</span> <span class="pre">~typing.TextIO</span> <span class="pre">=</span> <span class="pre">&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stairval/notepad/_api.html#Notepad.summarize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.notepad.Notepad.summarize" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -291,7 +312,7 @@ and the convenience functions provide iterators over error and warnings.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024.</p>
+    <p>&#169; Copyright 2025.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
