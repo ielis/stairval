@@ -7,7 +7,6 @@ from .simple import Person, Address, PersonAuditor, AddressAuditor
 
 
 class TestAuditor:
-
     @pytest.fixture(scope="class")
     def auditor(self) -> PersonAuditor:
         return PersonAuditor(
@@ -58,18 +57,15 @@ class TestAuditor:
         buf = io.StringIO()
         notepad.summarize(file=buf)
 
-        assert buf.getvalue() == """Showing errors and warnings
-  person
-  errors:
-  - `age` must not be negative
-    address
-    errors:
-    - `zip_code` must not be negative
-    warnings:
-    - `street` should not be empty
-"""
-
-    def test_add_subsections(
-        self,
-    ):
-        pass
+        expected = [
+            "Showing errors and warnings",
+            "  person",
+            "  errors:",
+            "  - `age` must not be negative",
+            "    address",
+            "    errors:",
+            "    - `zip_code` must not be negative",
+            "    warnings:",
+            "    - `street` should not be empty",
+        ]
+        assert buf.getvalue() == (os.linesep.join(expected) + os.linesep)

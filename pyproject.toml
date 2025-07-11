@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "stairval"
 # version in __init__
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 description = "Validation framework for hierarchical data structures"
 readme = "README.md"
 authors = [
@@ -17,11 +17,11 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 keywords = [
     "Validation",
@@ -34,9 +34,7 @@ dynamic = ["version"]
 [project.optional-dependencies]
 
 # Dependencies needed for running the test suite.
-test = [
-    "pytest>=7.0.0, <8.0.0",
-]
+test = ["pytest>=7.0.0, <8.0.0", "ruff==0.12.2"]
 
 # Dependencies needed for generating the online documentation.
 docs = [
