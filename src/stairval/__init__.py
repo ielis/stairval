@@ -8,5 +8,8 @@ from ._auditor import Auditor, ITEM
 __version__ = "0.2.1.dev0"
 
 __all__ = [
-    "Auditor", "Issue", "Level", "ITEM",
+    "Auditor",
+    "Issue",
+    "Level",
+    "ITEM",
 ]

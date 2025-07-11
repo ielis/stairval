@@ -4,7 +4,6 @@ from stairval.notepad import Notepad, create_notepad
 
 
 class TestNotepad:
-
     @pytest.fixture
     def notepad(self) -> Notepad:
         return create_notepad("badumtss")
@@ -42,5 +41,5 @@ class TestNotepad:
 
         sub = notepad.add_subsection("subtss")
         assert not sub.has_subsections()
-        
+
         assert notepad.has_subsections()

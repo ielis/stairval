@@ -7,7 +7,6 @@ from .simple import Person, Address, PersonAuditor, AddressAuditor
 
 
 class TestAuditor:
-
     @pytest.fixture(scope="class")
     def auditor(self) -> PersonAuditor:
         return PersonAuditor(
@@ -58,7 +57,9 @@ class TestAuditor:
         buf = io.StringIO()
         notepad.summarize(file=buf)
 
-        assert buf.getvalue() == """Showing errors and warnings
+        assert (
+            buf.getvalue()
+            == """Showing errors and warnings
   person
   errors:
   - `age` must not be negative
@@ -68,3 +69,4 @@ class TestAuditor:
     warnings:
     - `street` should not be empty
 """
+        )

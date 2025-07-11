@@ -47,12 +47,5 @@ class NotepadTree(Notepad):
     def get_subsections(self) -> typing.Sequence[Notepad]:
         return self._children
 
-
     def __str__(self):
-        return (
-            "NotepadTree("
-            f"label={self._label}, "
-            f"level={self._level}, "
-            f"children={[ch.label for ch in self._children]}"
-            ")"
-        )
+        return f"NotepadTree(label={self._label}, level={self._level}, children={[ch.label for ch in self._children]})"

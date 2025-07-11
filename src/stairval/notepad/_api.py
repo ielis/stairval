@@ -61,7 +61,7 @@ class Notepad(metaclass=abc.ABCMeta):
         ]
         while stack:
             node = stack.pop()
-            stack.extend(reversed(node.get_subsections())) # type: ignore
+            stack.extend(reversed(node.get_subsections()))  # type: ignore
             yield node
 
     def add_subsection(self, label: str) -> "Notepad":
@@ -93,9 +93,7 @@ class Notepad(metaclass=abc.ABCMeta):
         """
         return self._issues
 
-    def add_issue(
-        self, level: Level, message: str, solution: typing.Optional[str] = None
-    ):
+    def add_issue(self, level: Level, message: str, solution: typing.Optional[str] = None):
         """
         Add an issue with certain `level`, `message`, and an optional `solution`.
         """
@@ -236,22 +234,14 @@ class Notepad(metaclass=abc.ABCMeta):
                         file.write(l_pad + "errors:")
                         file.write(os.linesep)
                         for error in node.errors():
-                            file.write(
-                                l_pad
-                                + "- "
-                                + error.message
-                                + (f"· {error.solution}" if error.solution else "")
-                            )
+                            file.write(l_pad + "- " + error.message + (f"· {error.solution}" if error.solution else ""))
                             file.write(os.linesep)
                     if node.has_warnings():
                         file.write(l_pad + "warnings:")
                         file.write(os.linesep)
                         for warning in node.warnings():
                             file.write(
-                                l_pad
-                                + "- "
-                                + warning.message
-                                + (f"· {warning.solution}" if warning.solution else "")
+                                l_pad + "- " + warning.message + (f"· {warning.solution}" if warning.solution else "")
                             )
                             file.write(os.linesep)
         else:
