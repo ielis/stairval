@@ -94,7 +94,7 @@
 <span class="sd">    The function returns an instance responsible for issues of a subsection.</span>
 
 <span class="sd">    A collection of the issues from the current section are available via :attr:`issues` property</span>
-<span class="sd">    and the convenience functions provide iterators over error and warnings.</span>
+<span class="sd">    and the convenience functions provide iterables over error and warnings.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -135,13 +135,13 @@
 
 <div class="viewcode-block" id="Notepad.iter_sections">
 <a class="viewcode-back" href="../../../apidocs/stairval.notepad.html#stairval.notepad.Notepad.iter_sections">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">iter_sections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="s2">&quot;Notepad&quot;</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">iter_sections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="s2">&quot;Notepad&quot;</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Iterate over nodes in the depth-first fashion.</span>
 
-<span class="sd">        The iterator also includes the *current* node.</span>
+<span class="sd">        The iterable also includes the *current* node.</span>
 
-<span class="sd">        Returns: a depth-first iterator over :class:`Notepad` nodes.</span>
+<span class="sd">        Returns: a depth-first iterable over :class:`Notepad` nodes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">stack</span> <span class="o">=</span> <span class="p">[</span>
             <span class="bp">self</span><span class="p">,</span>
@@ -204,7 +204,7 @@
 
 <div class="viewcode-block" id="Notepad.errors">
 <a class="viewcode-back" href="../../../apidocs/stairval.notepad.html#stairval.notepad.Notepad.errors">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">errors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Issue</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">errors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Issue</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Iterate over the errors of the current section.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -260,7 +260,7 @@
 
 <div class="viewcode-block" id="Notepad.warnings">
 <a class="viewcode-back" href="../../../apidocs/stairval.notepad.html#stairval.notepad.Notepad.warnings">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">warnings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Iterator</span><span class="p">[</span><span class="n">Issue</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">warnings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Iterable</span><span class="p">[</span><span class="n">Issue</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Iterate over the warnings of the current section.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
