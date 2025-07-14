@@ -15,7 +15,7 @@ class Notepad(metaclass=abc.ABCMeta):
     The function returns an instance responsible for issues of a subsection.
 
     A collection of the issues from the current section are available via :attr:`issues` property
-    and the convenience functions provide iterators over error and warnings.
+    and the convenience functions provide iterables over error and warnings.
     """
 
     def __init__(
@@ -48,13 +48,13 @@ class Notepad(metaclass=abc.ABCMeta):
         """
         ...
 
-    def iter_sections(self) -> typing.Iterator["Notepad"]:
+    def iter_sections(self) -> typing.Iterable["Notepad"]:
         """
         Iterate over nodes in the depth-first fashion.
 
-        The iterator also includes the *current* node.
+        The iterable also includes the *current* node.
 
-        Returns: a depth-first iterator over :class:`Notepad` nodes.
+        Returns: a depth-first iterable over :class:`Notepad` nodes.
         """
         stack = [
             self,
@@ -105,7 +105,7 @@ class Notepad(metaclass=abc.ABCMeta):
         """
         self.add_issue(Level.ERROR, message, solution)
 
-    def errors(self) -> typing.Iterator[Issue]:
+    def errors(self) -> typing.Iterable[Issue]:
         """
         Iterate over the errors of the current section.
         """
@@ -146,7 +146,7 @@ class Notepad(metaclass=abc.ABCMeta):
         """
         self.add_issue(Level.WARN, message, solution)
 
-    def warnings(self) -> typing.Iterator[Issue]:
+    def warnings(self) -> typing.Iterable[Issue]:
         """
         Iterate over the warnings of the current section.
         """

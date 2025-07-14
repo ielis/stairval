@@ -1,3 +1,5 @@
+import typing
+
 import pytest
 
 from stairval.notepad import Notepad, create_notepad
@@ -43,3 +45,21 @@ class TestNotepad:
         assert not sub.has_subsections()
 
         assert notepad.has_subsections()
+
+    def test_iter_sections_is_iterable(
+        self,
+        notepad: Notepad,
+    ):
+        assert isinstance(notepad.iter_sections(), typing.Iterable)
+
+    def test_errors_is_iterable(
+        self,
+        notepad: Notepad,
+    ):
+        assert isinstance(notepad.errors(), typing.Iterable)
+
+    def test_warnings_is_iterable(
+        self,
+        notepad: Notepad,
+    ):
+        assert isinstance(notepad.warnings(), typing.Iterable)
