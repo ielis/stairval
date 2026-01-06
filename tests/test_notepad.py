@@ -1,3 +1,4 @@
+import os
 import typing
 
 import pytest
@@ -101,23 +102,23 @@ class TestNotepad:
         baz_pad.add_error("Baz error")
 
         summary = notepad.summary()
-        assert (
-            summary
-            == r"""Showing errors and warnings
-  badumtss
-    foo
-    errors:
-    - A foo error
-    warnings:
-    - A foo warning
-    bar
-    errors:
-    - Bar error
-      0
-      errors:
-      - 0 error
-        baz
-        errors:
-        - Baz error
-"""
+        lines = (
+            "Showing errors and warnings",
+            "  badumtss",
+            "    foo",
+            "    errors:",
+            "    - A foo error",
+            "    warnings:",
+            "    - A foo warning",
+            "    bar",
+            "    errors:",
+            "    - Bar error",
+            "      0",
+            "      errors:",
+            "      - 0 error",
+            "        baz",
+            "        errors:",
+            "        - Baz error",
+            "",
         )
+        assert summary == os.linesep.join(lines)
