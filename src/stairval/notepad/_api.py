@@ -1,4 +1,5 @@
 import abc
+import io
 import os
 import sys
 import typing
@@ -218,6 +219,12 @@ class Notepad(metaclass=abc.ABCMeta):
         file: typing.TextIO = sys.stdout,
         indent: int = 2,
     ):
+        """
+        Summarize the notepad into `file` (STDOUT by default).
+
+        :param file: a TextIO-like object to write the summary into (STDOUT by default).
+        :param indent: the number of spaces to delimit the notepad subsections (default: `2`).
+        """
         assert isinstance(indent, int) and indent >= 0
 
         n_errors = sum(node.error_count() for node in self.iter_sections())
@@ -250,3 +257,17 @@ class Notepad(metaclass=abc.ABCMeta):
         else:
             file.write("No errors or warnings were found")
             file.write(os.linesep)
+
+    def summary(
+        self,
+        indent: int = 2,
+    ) -> str:
+        """
+        Summarize the notepad into a `str`.
+
+        :param indent: the number of spaces to delimit the notepad subsections (default: `2`).
+        :return: The notepad summary.
+        """
+        buf = io.StringIO()
+        self.summarize(file=buf, indent=indent)
+        return buf.getvalue()

@@ -86,3 +86,38 @@ class TestNotepad:
         notepad: Notepad,
     ):
         assert isinstance(notepad.warnings(), typing.Iterable)
+
+    def test_summary(
+        self,
+        notepad: Notepad,
+    ):
+        foo_pad = notepad.add_subsection("foo")
+        foo_pad.add_error("A foo error")
+        foo_pad.add_warning("A foo warning")
+
+        bar_pad, pad_0, baz_pad = notepad.add_subsections("bar", 0, "baz")
+        bar_pad.add_error("Bar error")
+        pad_0.add_error("0 error")
+        baz_pad.add_error("Baz error")
+
+        summary = notepad.summary()
+        assert (
+            summary
+            == r"""Showing errors and warnings
+  badumtss
+    foo
+    errors:
+    - A foo error
+    warnings:
+    - A foo warning
+    bar
+    errors:
+    - Bar error
+      0
+      errors:
+      - 0 error
+        baz
+        errors:
+        - Baz error
+"""
+        )
