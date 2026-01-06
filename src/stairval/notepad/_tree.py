@@ -20,20 +20,20 @@ class NotepadTree(Notepad):
 
     def __init__(
         self,
-        label: str,
+        label: typing.Union[str, int],
         level: int,
     ):
         super().__init__(label, level)
         self._children: typing.MutableSequence["NotepadTree"] = []
 
-    def add_subsection(self, label: str) -> "NotepadTree":
+    def add_subsection(self, label: typing.Union[str, int]) -> "NotepadTree":
         sub = NotepadTree(label, self._level + 1)
         self._children.append(sub)
         return sub
 
     def add_subsections(
         self,
-        *labels: str,
+        *labels: typing.Union[str, int],
     ) -> typing.Sequence["NotepadTree"]:
         nodes = []
         for label in labels:
@@ -49,3 +49,6 @@ class NotepadTree(Notepad):
 
     def __str__(self):
         return f"NotepadTree(label={self._label}, level={self._level}, children={[ch.label for ch in self._children]})"
+
+    def __repr__(self):
+        return str(self)
