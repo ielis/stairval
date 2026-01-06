@@ -1,4 +1,5 @@
 import abc
+import io
 import os
 import sys
 import typing
@@ -20,7 +21,7 @@ class Notepad(metaclass=abc.ABCMeta):
 
     def __init__(
         self,
-        label: str,
+        label: typing.Union[str, int],
         level: int,
     ):
         self._label = label
@@ -30,7 +31,7 @@ class Notepad(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def add_subsections(
         self,
-        *labels: str,
+        *labels: typing.Union[str, int],
     ) -> typing.Sequence["Notepad"]:
         """
         Add a sequence/chain of subsections.
@@ -64,7 +65,10 @@ class Notepad(metaclass=abc.ABCMeta):
             stack.extend(reversed(node.get_subsections()))  # type: ignore
             yield node
 
-    def add_subsection(self, label: str) -> "Notepad":
+    def add_subsection(
+        self,
+        label: typing.Union[str, int],
+    ) -> "Notepad":
         """
         Add a single labeled subsection.
 
@@ -73,7 +77,7 @@ class Notepad(metaclass=abc.ABCMeta):
         return self.add_subsections(label)[0]
 
     @property
-    def label(self) -> str:
+    def label(self) -> typing.Union[str, int]:
         """
         Get the section label.
         """
@@ -215,6 +219,12 @@ class Notepad(metaclass=abc.ABCMeta):
         file: typing.TextIO = sys.stdout,
         indent: int = 2,
     ):
+        """
+        Summarize the notepad into `file` (STDOUT by default).
+
+        :param file: a TextIO-like object to write the summary into (STDOUT by default).
+        :param indent: the number of spaces to delimit the notepad subsections (default: `2`).
+        """
         assert isinstance(indent, int) and indent >= 0
 
         n_errors = sum(node.error_count() for node in self.iter_sections())
@@ -227,7 +237,7 @@ class Notepad(metaclass=abc.ABCMeta):
                 if node.has_errors_or_warnings(include_subsections=True):
                     # We must report the node label even if there are no issues with the node.
                     l_pad = " " * ((node.level + 1) * indent)
-                    file.write(l_pad + node.label)
+                    file.write(l_pad + str(node.label))
                     file.write(os.linesep)
 
                     if node.has_errors():
@@ -247,3 +257,17 @@ class Notepad(metaclass=abc.ABCMeta):
         else:
             file.write("No errors or warnings were found")
             file.write(os.linesep)
+
+    def summary(
+        self,
+        indent: int = 2,
+    ) -> str:
+        """
+        Summarize the notepad into a `str`.
+
+        :param indent: the number of spaces to delimit the notepad subsections (default: `2`).
+        :return: The notepad summary.
+        """
+        buf = io.StringIO()
+        self.summarize(file=buf, indent=indent)
+        return buf.getvalue()
