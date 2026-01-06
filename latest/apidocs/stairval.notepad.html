@@ -128,6 +128,19 @@ and the convenience functions provide iterables over error and warnings.</p>
 <dt class="sig sig-object py" id="stairval.notepad.Notepad.add_subsection">
 <span class="sig-name descname"><span class="pre">add_subsection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#stairval.notepad.Notepad" title="stairval.notepad._api.Notepad"><span class="pre">Notepad</span></a></span></span><a class="reference internal" href="../_modules/stairval/notepad/_api.html#Notepad.add_subsection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.notepad.Notepad.add_subsection" title="Link to this definition"></a></dt>
 <dd><p>Add a single labeled subsection.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">stairval.notepad</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_notepad</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foo</span> <span class="o">=</span> <span class="n">create_notepad</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bar</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="n">add_subsection</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bar</span><span class="o">.</span><span class="n">label</span>
+<span class="go">&#39;bar&#39;</span>
+</pre></div>
+</div>
+<p>If a subsection with the label already exists, then it is returned.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bar2</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="n">add_subsection</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bar2</span> <span class="ow">is</span> <span class="n">bar</span>
+<span class="go">True</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>label</strong> – a label to use for the new subsection.</p>
@@ -139,6 +152,23 @@ and the convenience functions provide iterables over error and warnings.</p>
 <dt class="sig sig-object py" id="stairval.notepad.Notepad.add_subsections">
 <em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_subsections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#stairval.notepad.Notepad" title="stairval.notepad._api.Notepad"><span class="pre">Notepad</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/stairval/notepad/_api.html#Notepad.add_subsections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stairval.notepad.Notepad.add_subsections" title="Link to this definition"></a></dt>
 <dd><p>Add a sequence/chain of subsections.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">stairval.notepad</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_notepad</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foo</span> <span class="o">=</span> <span class="n">create_notepad</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subs</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="n">add_subsections</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;baz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">subs</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p>Already existing subsections are not re-created:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">subs2</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="n">add_subsections</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;bam&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="n">subs2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="n">subs2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="n">subs2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="go">False</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>labels</strong> – a sequence of labels for the new notepad subsections.</p>
@@ -253,7 +283,7 @@ and the convenience functions provide iterables over error and warnings.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="stairval.notepad.Notepad.level">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#stairval.notepad.Notepad.level" title="Link to this definition"></a></dt>
-<dd><p>Get the level of the notepad node (distance from the top-level hierarchy node).</p>
+<dd><p>Get the level of the notepad node (distance from the root node, which has the level of <cite>0</cite>).</p>
 </dd></dl>
 
 <dl class="py method">

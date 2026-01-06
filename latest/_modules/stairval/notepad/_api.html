@@ -117,6 +117,22 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a sequence/chain of subsections.</span>
 
+<span class="sd">        &gt;&gt;&gt; from stairval.notepad import create_notepad</span>
+<span class="sd">        &gt;&gt;&gt; foo = create_notepad(&#39;foo&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; subs = foo.add_subsections(&#39;bar&#39;, 0, &#39;baz&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; len(subs)</span>
+<span class="sd">        3</span>
+
+<span class="sd">        Already existing subsections are not re-created:</span>
+
+<span class="sd">        &gt;&gt;&gt; subs2 = foo.add_subsections(&#39;bar&#39;, 0, &#39;bam&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; subs[0] is subs2[0]</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; subs[1] is subs2[1]</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; subs[2] is subs2[2]</span>
+<span class="sd">        False</span>
+
 <span class="sd">        :param labels: a sequence of labels for the new notepad subsections.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
@@ -162,6 +178,18 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a single labeled subsection.</span>
 
+<span class="sd">        &gt;&gt;&gt; from stairval.notepad import create_notepad</span>
+<span class="sd">        &gt;&gt;&gt; foo = create_notepad(&#39;foo&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; bar = foo.add_subsection(&#39;bar&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; bar.label</span>
+<span class="sd">        &#39;bar&#39;</span>
+
+<span class="sd">        If a subsection with the label already exists, then it is returned.</span>
+
+<span class="sd">        &gt;&gt;&gt; bar2 = foo.add_subsection(&#39;bar&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; bar2 is bar</span>
+<span class="sd">        True</span>
+
 <span class="sd">        :param label: a label to use for the new subsection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_subsections</span><span class="p">(</span><span class="n">label</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
@@ -177,7 +205,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">level</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the level of the notepad node (distance from the top-level hierarchy node).</span>
+<span class="sd">        Get the level of the notepad node (distance from the root node, which has the level of `0`).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_level</span>
 
