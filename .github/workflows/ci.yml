@@ -1,10 +1,10 @@
 name: Stairval CI
 
 on:
-    push:
-      branches: [ master ]
-    pull_request:
-      branches: [ master, develop ]
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master, develop]
 
 jobs:
   test:
@@ -13,8 +13,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ windows-latest, macOS-latest, ubuntu-latest ]
-        python: [ "3.9", "3.10", "3.11", "3.12", "3.13" ]
+        os: [windows-latest, macOS-latest, ubuntu-latest]
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - uses: actions/checkout@v4
@@ -23,27 +23,41 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install repo
-        run: |
-          python3 -m pip install --editable .[test]
+        run: python3 -m pip install --editable .[test]
       - name: Run tests
-        run: |
-          pytest
+        run: pytest
 
   formatting:
     name: Check code formatting
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-    - name: Check out
-      uses: actions/checkout@v4
+      - name: Check out
+        uses: actions/checkout@v4
 
-    - name: Initialize Python 3.12
-      uses: actions/setup-python@v4.3.1
-      with:
-        python-version: "3.12"
+      - name: Initialize Python 3.12
+        uses: actions/setup-python@v4.3.1
+        with:
+          python-version: "3.12"
 
-    - name: Install repo
-      run: |
-        python3 -m pip install --editable .[test]
-    - name: Check formatting
-      run:  ruff format --check
+      - name: Install package
+        run: python3 -m pip install --editable .[test]
+      - name: Check formatting
+        run: ruff format --check
+
+  linting:
+    name: Run linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Initialize Python 3.12
+        uses: actions/setup-python@v4.3.1
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: python3 -m pip install --editable .[test]
+      - name: Run linter
+        run: ruff check --silent
