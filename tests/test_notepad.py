@@ -122,3 +122,21 @@ class TestNotepad:
             "",
         )
         assert summary == os.linesep.join(lines)
+
+    def test_adding_the_same_subsection_twice_returns_the_same_subsection(
+        self,
+        notepad: Notepad,
+    ):
+        foo_one = notepad.add_subsection("foo")
+        foo_two = notepad.add_subsection("foo")
+
+        assert foo_one is foo_two
+
+    def test_adding_the_same_subsections_twice_returns_the_same_subsections(
+        self,
+        notepad: Notepad,
+    ):
+        lefts = notepad.add_subsections("a", "b", 1, "c")
+        rights = notepad.add_subsections("a", "b", 1, "c")
+
+        assert all(left is right for left, right in zip(lefts, rights))
