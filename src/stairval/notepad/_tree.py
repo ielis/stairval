@@ -49,10 +49,12 @@ class NotepadTree(Notepad):
         node: "NotepadTree",
         label: typing.Union[str, int],
     ) -> "NotepadTree":
+        # Return the node if it already exists ...
         for child in node._children:
             if child.label == label:
                 return child
 
+        # ... or create a new node
         sub = NotepadTree(label, node._level + 1)
         node._children.append(sub)
         return sub
