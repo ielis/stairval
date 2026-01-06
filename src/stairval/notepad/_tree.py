@@ -27,9 +27,7 @@ class NotepadTree(Notepad):
         self._children: typing.MutableSequence["NotepadTree"] = []
 
     def add_subsection(self, label: typing.Union[str, int]) -> "NotepadTree":
-        sub = NotepadTree(label, self._level + 1)
-        self._children.append(sub)
-        return sub
+        return NotepadTree._get_or_insert_node(self, label)
 
     def add_subsections(
         self,
@@ -38,14 +36,28 @@ class NotepadTree(Notepad):
         nodes = []
         for label in labels:
             parent = self if len(nodes) == 0 else nodes[-1]
-            node = NotepadTree(label, parent.level + 1)
-            parent._children.append(node)
+            node = NotepadTree._get_or_insert_node(parent, label)
             nodes.append(node)
 
         return nodes
 
     def get_subsections(self) -> typing.Sequence[Notepad]:
         return self._children
+
+    @staticmethod
+    def _get_or_insert_node(
+        node: "NotepadTree",
+        label: typing.Union[str, int],
+    ) -> "NotepadTree":
+        # Return the node if it already exists ...
+        for child in node._children:
+            if child.label == label:
+                return child
+
+        # ... or create a new node
+        sub = NotepadTree(label, node._level + 1)
+        node._children.append(sub)
+        return sub
 
     def __str__(self):
         return f"NotepadTree(label={self._label}, level={self._level}, children={[ch.label for ch in self._children]})"
