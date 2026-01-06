@@ -36,6 +36,22 @@ class Notepad(metaclass=abc.ABCMeta):
         """
         Add a sequence/chain of subsections.
 
+        >>> from stairval.notepad import create_notepad
+        >>> foo = create_notepad('foo')
+        >>> subs = foo.add_subsections('bar', 0, 'baz')
+        >>> len(subs)
+        3
+
+        Already existing subsections are not re-created:
+
+        >>> subs2 = foo.add_subsections('bar', 0, 'bam')
+        >>> subs[0] is subs2[0]
+        True
+        >>> subs[1] is subs2[1]
+        True
+        >>> subs[2] is subs2[2]
+        False
+
         :param labels: a sequence of labels for the new notepad subsections.
         """
         pass
@@ -72,6 +88,18 @@ class Notepad(metaclass=abc.ABCMeta):
         """
         Add a single labeled subsection.
 
+        >>> from stairval.notepad import create_notepad
+        >>> foo = create_notepad('foo')
+        >>> bar = foo.add_subsection('bar')
+        >>> bar.label
+        'bar'
+
+        If a subsection with the label already exists, then it is returned.
+
+        >>> bar2 = foo.add_subsection('bar')
+        >>> bar2 is bar
+        True
+
         :param label: a label to use for the new subsection.
         """
         return self.add_subsections(label)[0]
@@ -86,7 +114,7 @@ class Notepad(metaclass=abc.ABCMeta):
     @property
     def level(self) -> int:
         """
-        Get the level of the notepad node (distance from the top-level hierarchy node).
+        Get the level of the notepad node (distance from the root node, which has the level of `0`).
         """
         return self._level
 
