@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "stairval"
-version = "0.2.3"
+version = "0.2.4.dev0"
 requires-python = ">=3.9"
 description = "Validation framework for hierarchical data structures"
 readme = "README.md"
