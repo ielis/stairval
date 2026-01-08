@@ -96,32 +96,29 @@ class TestNotepad:
         foo_pad.add_error("A foo error")
         foo_pad.add_warning("A foo warning")
 
-        bar_pad, pad_0, baz_pad = notepad.add_subsections("bar", 0, "baz")
+        bar_pad, _, baz_pad = notepad.add_subsections("bar", 0, "baz")
         bar_pad.add_error("Bar error")
-        pad_0.add_error("0 error")
         baz_pad.add_error("Baz error")
 
-        summary = notepad.summary()
-        lines = (
+        actual = notepad.summary().split(os.linesep)
+        expected = [
             "Showing errors and warnings",
-            "  badumtss",
-            "    foo",
-            "    errors:",
-            "    - A foo error",
-            "    warnings:",
-            "    - A foo warning",
-            "    bar",
-            "    errors:",
-            "    - Bar error",
-            "      0",
+            "▸ badumtss",
+            "  ▸ foo",
             "      errors:",
-            "      - 0 error",
-            "        baz",
-            "        errors:",
-            "        - Baz error",
+            "      • A foo error",
+            "      warnings:",
+            "      • A foo warning",
+            "  ▸ bar",
+            "      errors:",
+            "      • Bar error",
+            "    ▸ 0",
+            "      ▸ baz",
+            "          errors:",
+            "          • Baz error",
             "",
-        )
-        assert summary == os.linesep.join(lines)
+        ]
+        assert actual == expected
 
     def test_adding_the_same_subsection_twice_returns_the_same_subsection(
         self,

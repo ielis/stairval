@@ -54,18 +54,18 @@ class TestAuditor:
         notepad = auditor.prepare_notepad("person")
         auditor.audit(person, notepad)
 
-        buf = io.StringIO()
-        notepad.summarize(file=buf)
+        actual = notepad.summary().split(os.linesep)
 
         expected = [
             "Showing errors and warnings",
-            "  person",
-            "  errors:",
-            "  - `age` must not be negative",
-            "    address",
+            "▸ person",
             "    errors:",
-            "    - `zip_code` must not be negative",
-            "    warnings:",
-            "    - `street` should not be empty",
+            "    • `age` must not be negative",
+            "  ▸ address",
+            "      errors:",
+            "      • `zip_code` must not be negative",
+            "      warnings:",
+            "      • `street` should not be empty",
+            "",
         ]
-        assert buf.getvalue() == (os.linesep.join(expected) + os.linesep)
+        assert actual == expected

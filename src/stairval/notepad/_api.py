@@ -246,12 +246,16 @@ class Notepad(metaclass=abc.ABCMeta):
         self,
         file: typing.TextIO = sys.stdout,
         indent: int = 2,
+        section_bullet: str = "▸",
+        item_bullet: str = "•",
     ):
         """
         Summarize the notepad into `file` (STDOUT by default).
 
         :param file: a TextIO-like object to write the summary into (STDOUT by default).
         :param indent: the number of spaces to delimit the notepad subsections (default: `2`).
+        :param node_bullet: the symbol for highlighting the notepad sections (default: `▸`).
+        :param item_bullet: the symbol for highlighting the reported items (default: `•`).
         """
         assert isinstance(indent, int) and indent >= 0
 
@@ -264,22 +268,50 @@ class Notepad(metaclass=abc.ABCMeta):
             for node in self.iter_sections():
                 if node.has_errors_or_warnings(include_subsections=True):
                     # We must report the node label even if there are no issues with the node.
-                    l_pad = " " * ((node.level + 1) * indent)
-                    file.write(l_pad + str(node.label))
+                    n_pad = indent * (node.level + 1)
+                    file.write(
+                        prepare_buletted_entry(
+                            indent=n_pad,
+                            text=str(node.label),
+                            bullet=section_bullet,
+                        )
+                    )
                     file.write(os.linesep)
 
                     if node.has_errors():
-                        file.write(l_pad + "errors:")
+                        file.write(
+                            prepare_buletted_entry(
+                                indent=n_pad + indent,
+                                text="errors:",
+                            )
+                        )
                         file.write(os.linesep)
                         for error in node.errors():
-                            file.write(l_pad + "- " + error.message + (f"· {error.solution}" if error.solution else ""))
+                            text = error.message + (f"· {error.solution}" if error.solution else "")
+                            file.write(
+                                prepare_buletted_entry(
+                                    indent=n_pad + (indent * 2),
+                                    text=text,
+                                    bullet=item_bullet,
+                                )
+                            )
                             file.write(os.linesep)
                     if node.has_warnings():
-                        file.write(l_pad + "warnings:")
+                        file.write(
+                            prepare_buletted_entry(
+                                indent=n_pad + indent,
+                                text="warnings:",
+                            )
+                        )
                         file.write(os.linesep)
                         for warning in node.warnings():
+                            text = warning.message + (f"· {warning.solution}" if warning.solution else "")
                             file.write(
-                                l_pad + "- " + warning.message + (f"· {warning.solution}" if warning.solution else "")
+                                prepare_buletted_entry(
+                                    indent=n_pad + (indent * 2),
+                                    text=text,
+                                    bullet=item_bullet,
+                                )
                             )
                             file.write(os.linesep)
         else:
@@ -289,13 +321,30 @@ class Notepad(metaclass=abc.ABCMeta):
     def summary(
         self,
         indent: int = 2,
+        node_bullet: str = "▸",
+        item_bullet: str = "•",
     ) -> str:
         """
         Summarize the notepad into a `str`.
 
         :param indent: the number of spaces to delimit the notepad subsections (default: `2`).
+        :param node_bullet: the symbol for highlighting the notepad sections (default: `▸`).
+        :param item_bullet: the symbol for highlighting the reported items (default: `•`).
         :return: The notepad summary.
         """
         buf = io.StringIO()
-        self.summarize(file=buf, indent=indent)
+        self.summarize(
+            file=buf,
+            indent=indent,
+            section_bullet=node_bullet,
+            item_bullet=item_bullet,
+        )
         return buf.getvalue()
+
+
+def prepare_buletted_entry(
+    indent: int,
+    text: str,
+    bullet: str = " ",
+) -> str:
+    return " " * max(indent - 2, 0) + bullet + " " + text
